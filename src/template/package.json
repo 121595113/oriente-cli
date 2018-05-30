@@ -1,0 +1,9 @@
+{
+  "name": "oriente-vue",
+  "version": "0.0.1",
+  "description": "A Vue.js project",
+  "author": "TaoYu <121595113@qq.com>",
+  "license": "ISC",
+  "router-mapping": {
+  }
+}
