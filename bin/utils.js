@@ -30,7 +30,7 @@ const rootPath = getRootPath(process.cwd())
 const relativePath = path.relative(`${rootPath}`, process.cwd());
 
 exports.create = function (name, spacePath) {
-  spacePath = spacePath || 'test/pages'
+  spacePath = spacePath || 'src/pages'
 
   name.split(',').forEach(curName => {
     const targetPath = path.resolve(`${rootPath}/${relativePath ? relativePath : spacePath}/`, `${curName}`)
@@ -69,7 +69,7 @@ exports.create = function (name, spacePath) {
 };
 
 exports.remove = function (name, spacePath) {
-  spacePath = spacePath || 'test/pages'
+  spacePath = spacePath || 'src/pages'
 
   name.split(',').forEach(curName => {
     const targetPath = path.resolve(`${rootPath}/${relativePath ? relativePath : spacePath}/`, `${curName}`)
