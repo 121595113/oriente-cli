@@ -5,7 +5,7 @@ const acorn = require('acorn')
 const escodegen = require('escodegen')
 const plugin = require('./plugin')
 
-const dist = 'test'
+const dist = 'src'
 
 /**
  * 获取项目根目录
