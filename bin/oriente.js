@@ -52,7 +52,7 @@ program
 
 program
   .command('plugin <method> <name>')
-  .description('插件相关操作')
+  .description('插件添加|删除操作')
   .action((method, name) => {
     if(method === 'add') {
       utils.pluginAdd(name, program.namespace, program.type, program.config === 'true')
@@ -60,6 +60,13 @@ program
     if(method === 'remove') {
       utils.pluginRemove(name, program.config !== 'true')
     }
+  })
+  .on('--help', () => {
+    console.log('  Examples:');
+    console.log();
+    console.log('    $ oriente plugin add example-plugin [--config false]');
+    console.log('    $ oriente plugin remove example-plugin [--config false]');
+    console.log();
   });
 
 program.parse(process.argv);

@@ -43,7 +43,7 @@ exports.create = function (name, spacePath) {
   name.split(',').forEach((curName, index) => {
     const targetPath = path.resolve(`${rootPath}/${relativePath ? relativePath : spacePath}/`, `${curName}`)
     jsonFile = jsonFile || path.resolve(targetPath, `../package.json`)
-    let createPage = fs.pathExists(templatePath)
+    pAll[index] = fs.pathExists(templatePath)
       .then(exists => {
         if (!exists) return Promise.reject('模板文件不存在')
         return fs.pathExists(targetPath)
@@ -54,18 +54,13 @@ exports.create = function (name, spacePath) {
         }
         return fs.copy(templatePath, targetPath)
       })
-      .then(() => `${curName}创建成功`);
-
-    // let createJson = ;
-
-    pAll[index] = Promise.all([createPage, Promise.resolve(curName)])
-      .then(msgs => {
-        console.log(chalk.green(msgs[0]))
-        return msgs[1]
+      .then(() => {
+        console.log(chalk.green(`${curName}创建成功`))
+        return curName
       })
       .catch(err => {
         console.error(chalk.red(err))
-      })
+      });
   })
 
   Promise.all(pAll).then(names => {
@@ -80,15 +75,15 @@ exports.create = function (name, spacePath) {
             })
         })
         .then(res => {
-          let isEmpty = false;
+          let isEmpty = true;
           for (let curName of names) {
             if (curName) {
               let fileName = curName.split('/')
               fileName = fileName[fileName.length - 1]
               res.data['router-mapping'][toCamelCase(fileName)] = fileName;
+              isEmpty = false
               continue;
             }
-            isEmpty = true
           }
           return fs.writeJson(jsonFile, res.data, { spaces: 2 })
             .then(() => res.type === 'copy' ? `并创建了package.json文件，路径如下 -> ${jsonFile}` : isEmpty ? '' : '配置添加成功')
