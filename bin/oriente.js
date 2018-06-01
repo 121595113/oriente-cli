@@ -18,7 +18,7 @@ program
   .usage('<command> [options]')
   .option('--namespace [value]', '设置插件命名空间', '')
   .option('--config [boolean]', '是否更新配置文件', 'true')
-  .option('--type [value]', '命名空间创建方式', 'clobbers')
+  .option('--type [value]', '命名空间创建方式clobbers|merges', 'clobbers')
 
 program
   .command('create <name> [path]')
