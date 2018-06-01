@@ -1,6 +1,6 @@
 {
   "name": "oriente-cli",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "from oriente",
   "bin": {
     "oriente": "./bin/oriente.js"
@@ -8,8 +8,14 @@
   "author": "121595113@qq.com",
   "license": "ISC",
   "dependencies": {
+    "acorn": "^5.5.3",
     "chalk": "^2.4.1",
     "commander": "^2.15.1",
+    "escodegen": "^1.9.1",
     "fs-extra": "^6.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/121595113/oriente-cli.git"
   }
 }
