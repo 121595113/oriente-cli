@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 const program = require('commander');
-const chalk = require('chalk')
+const chalk = require('chalk');
+const download = require('download-git-repo');
 const utils = require('./utils');
 
 process.title = 'oriente';
@@ -19,6 +20,16 @@ program
   .option('--namespace [value]', '设置插件命名空间', '')
   .option('--config [boolean]', '是否更新配置文件', 'true')
   .option('--type [value]', '命名空间创建方式clobbers|merges', 'clobbers')
+
+// 初始化项目
+program
+  .command('init <name>')
+  .action(name => {
+    console.log(name)
+    download('https://github.com:121595113/oriente-template#master', name, { clone: true }, (err) => {
+      console.log(err ? err : 'Success')
+    })
+  });
 
 program
   .command('create <name> [path]')
@@ -54,10 +65,10 @@ program
   .command('plugin <method> <name>')
   .description('插件添加|删除操作')
   .action((method, name) => {
-    if(method === 'add') {
+    if (method === 'add') {
       utils.pluginAdd(name, program.namespace, program.type, program.config === 'true')
     }
-    if(method === 'remove') {
+    if (method === 'remove') {
       utils.pluginRemove(name, program.config !== 'true')
     }
   })
