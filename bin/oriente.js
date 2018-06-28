@@ -1,9 +1,13 @@
 #!/usr/bin/env node
 
+const path = require('path');
+const fs = require('fs-extra');
 const program = require('commander');
 const chalk = require('chalk');
-const download = require('download-git-repo');
-const utils = require('./utils');
+const utils = require('./handler/index');
+const inquirer = require('inquirer');
+
+const symbols = require('log-symbols');
 
 process.title = 'oriente';
 
@@ -17,19 +21,39 @@ if (process.argv.length <= 2) {
 program
   .version(require('../package').version)
   .usage('<command> [options]')
-  .option('--namespace [value]', '设置插件命名空间', '')
-  .option('--config [boolean]', '是否更新配置文件', 'true')
-  .option('--type [value]', '命名空间创建方式clobbers|merges', 'clobbers')
+  .option('--online', '从远程库更新')
 
 // 初始化项目
 program
   .command('init <name>')
   .action(name => {
-    console.log(name)
-    download('https://github.com:121595113/oriente-template#master', name, { clone: true }, (err) => {
-      console.log(err ? err : 'Success')
-    })
-  });
+    if (fs.existsSync(name)) {
+      console.log(symbols.error, chalk.red(`${name}已存在`));
+      return;
+    }
+    inquirer.prompt([
+    {
+      name: 'name',
+      message: `name`,
+      default: name
+    },
+    {
+      name: 'description',
+      message: '请输入项目描述'
+    },
+    {
+      name: 'author',
+      message: '请输入作者名称'
+    },
+    {
+      name: 'version',
+      message: '请输入初始版本号',
+      default: '0.0.1'
+    }
+    ]).then((answers) => {
+     utils.init(answers, name);
+    });
+});
 
 program
   .command('create <name> [path]')
@@ -66,17 +90,47 @@ program
   .description('插件添加|删除操作')
   .action((method, name) => {
     if (method === 'add') {
-      utils.pluginAdd(name, program.namespace, program.type, program.config === 'true')
+      inquirer.prompt([
+        {
+          name: 'namespace',
+          message: '插件的命名空间',
+          default: 'cordova.plugins'
+        },
+        {
+          type: 'list',
+          name: 'type',
+          message: '命名空间创建方式',
+          choices: ['clobbers', 'merges'],
+          default: 'clobbers'
+        },
+        {
+          type: 'confirm',
+          name: 'config',
+          message: '同步更新配置文件？',
+          default: true
+        }
+      ]).then(answers => {
+        utils.pluginAdd(name, answers.namespace, answers.type, answers.config)
+      })
     }
     if (method === 'remove') {
-      utils.pluginRemove(name, program.config !== 'true')
+      inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'config',
+          message: '删除配置文件中相关的信息？',
+          default: true
+        }
+      ]).then(answers => {
+        utils.pluginRemove(name, answers.config)
+      });
     }
   })
   .on('--help', () => {
     console.log('  Examples:');
     console.log();
-    console.log('    $ oriente plugin add example-plugin [--config false]');
-    console.log('    $ oriente plugin remove example-plugin [--config false]');
+    console.log('    $ oriente plugin add example-plugin');
+    console.log('    $ oriente plugin remove example-plugin');
     console.log();
   });
 

@@ -1,8 +1,4 @@
-function lastName(name) {
-  return name.substr(name.lastIndexOf('-') + 1 || 0)
-}
-
-exports.lastName = lastName
+const utils = require('../utils');
 
 exports.setItem = function (name, nameSpace, type) {
   return {
@@ -27,8 +23,8 @@ exports.setItem = function (name, nameSpace, type) {
           "type": "Literal",
           "start": 114,
           // "end": 144,
-          "value": `cordova-plugin-${name}.${lastName(name)}`,
-          "raw": `"cordova-plugin-${name}.${lastName(name)}"`
+          "value": `cordova-plugin-${name}.${utils.lastName(name)}`,
+          "raw": `"cordova-plugin-${name}.${utils.lastName(name)}"`
         },
         "kind": "init"
       },
@@ -100,8 +96,8 @@ exports.setItem = function (name, nameSpace, type) {
             "type": "Literal",
             "start": 288,
             // "end": 296,
-            "value": `${nameSpace ? nameSpace : 'cordova.plugins.' + lastName(name)}`,
-            "raw": `"${nameSpace ? nameSpace : 'cordova.plugins.' + lastName(name)}"`
+            "value": `${nameSpace  + utils.lastName(name)}`,
+            "raw": `"${nameSpace + utils.lastName(name)}"`
           }]
         },
         "kind": "init"
