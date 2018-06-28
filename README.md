@@ -1,5 +1,7 @@
 # oriente使用说明
 
+oriente-cli主要用于hybrid项目根据模版创建业务模块和添加Cordova插件
+
 ## 安装
 
 全局安装
