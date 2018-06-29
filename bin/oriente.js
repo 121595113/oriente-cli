@@ -56,11 +56,20 @@ program
 });
 
 program
-  .command('create <name> [path]')
+  .command('create <name>')
   .description('创建新的业务模块')
   .alias('c')
-  .action(function (name, path) {
-    utils.create(name, path);
+  .action(function (name) {
+    let defaultPath = path.resolve(process.cwd(), './src/pages/');
+    inquirer.prompt([
+    {
+      name: 'path',
+      message: '创建目录',
+      default: defaultPath
+    }
+    ]).then(answers => {
+      utils.create(name, answers.path || defaultPath);
+    })
   })
   .on('--help', () => {
     console.log('  Examples:');
@@ -71,11 +80,20 @@ program
   });
 
 program
-  .command('remove <name> [path]')
+  .command('remove <name>')
   .description('移除已有的业务模块')
   .alias('r')
-  .action(function (name, path) {
-    utils.remove(name, path);
+  .action(function (name) {
+    let defaultPath = path.resolve(process.cwd(), `./src/pages/${name}`);
+    inquirer.prompt([
+    {
+      name: 'path',
+      message: '删除目录',
+      default: defaultPath
+    }
+    ]).then(answers => {
+      utils.remove(name, answers.path || defaultPath);
+    })
   })
   .on('--help', () => {
     console.log('  Examples:');

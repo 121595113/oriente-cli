@@ -40,14 +40,12 @@ exports.create = function (name, spacePath) {
 };
 
 function _create(name, spacePath) {
-  spacePath = spacePath || `${CONFIG.DIST}/pages`
-
   let pAll = [];
   let jsonFile
 
   name.split(',').forEach((curName, index) => {
-    const targetPath = path.resolve(`${CONFIG.rootPath}/${CONFIG.relativePath ? CONFIG.relativePath : spacePath}/`, `${curName}`)
-    jsonFile = jsonFile || path.resolve(targetPath, `../package.json`)
+    const targetPath = path.resolve(spacePath, curName)
+    jsonFile = jsonFile || path.resolve(spacePath, './package.json')
     pAll[index] = fs.pathExists(CONFIG.templatePath)
       .then(exists => {
         if (!exists) return Promise.reject('模板文件不存在')
@@ -102,11 +100,9 @@ function _create(name, spacePath) {
     })
 }
 
-exports.remove = function (name, spacePath) {
-  spacePath = spacePath || `${CONFIG.DIST}/pages`
+exports.remove = function (name, targetPath) {
 
   name.split(',').forEach(curName => {
-    const targetPath = path.resolve(`${CONFIG.rootPath}/${CONFIG.relativePath ? CONFIG.relativePath : spacePath}/`, `${curName}`)
     const jsonFile = path.resolve(targetPath, `../package.json`)
     fs.pathExists(targetPath)
       .then(exists => {
