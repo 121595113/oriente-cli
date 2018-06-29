@@ -6,7 +6,7 @@ const fs = require('fs-extra');
  * @return {sting}           [description]
  */
 exports.getRootPath = function(_rootpath) {
-  while (_rootpath && !fs.pathExistsSync(path.resolve(_rootpath, 'node_modules'))) {
+  while (_rootpath && (!fs.pathExistsSync(path.resolve(_rootpath, 'node_modules')) || !fs.pathExistsSync(path.resolve(_rootpath, 'package.json')))) {
     _rootpath = path.resolve(_rootpath, '../')
   }
   return _rootpath;
